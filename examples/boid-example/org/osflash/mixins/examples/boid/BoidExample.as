@@ -1,5 +1,7 @@
 package org.osflash.mixins.examples.boid
 {
+	import flash.display.StageScaleMode;
+	import flash.display.StageAlign;
 	import org.osflash.mixins.IMixin;
 	import org.osflash.mixins.Mixin;
 	import org.osflash.mixins.examples.boid.mixins.boid.IBoid;
@@ -32,7 +34,11 @@ package org.osflash.mixins.examples.boid
 		
 		public function BoidExample()
 		{
+			stage.align = StageAlign.TOP_LEFT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
 			const boid : IMixin = new Mixin();
+			
 			boid.add(IPosition, Position);
 			boid.add(IRunnable, BoidRunnable);
 			boid.add(IFlock, BoidFlock);
@@ -49,10 +55,10 @@ package org.osflash.mixins.examples.boid
 		
 		private function handleBoidCreatedSignal(mixin : IMixin) : void
 		{
-			for(var i : int = 0; i<30; i++)
+			for(var i : int = 0; i<50; i++)
 			{
-				const bx : int = Math.random() * 800;
-				const by : int = Math.random() * 800;
+				const bx : int = Math.random() * 600 + 100;
+				const by : int = Math.random() * 600 + 100;
 				
 				const boid : IBoid = mixin.create(IBoid, {x:bx, y:by});
 				

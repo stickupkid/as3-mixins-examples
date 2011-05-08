@@ -9,7 +9,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.displayobject
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class BoidDisplayObject implements IDisplayObject
+	public final class BoidDisplayObject implements IDisplayObject
 	{
 
 		private var _self : IBoid;

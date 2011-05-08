@@ -9,7 +9,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.graphic
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class BoidGraphics implements IGraphics
+	public final class BoidGraphics implements IGraphics
 	{
 
 		private var _self : IBoid;

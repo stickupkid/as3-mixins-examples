@@ -6,7 +6,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */ 
-	public class BoidFlock implements IFlock
+	public final class BoidFlock implements IFlock
 	{
 		
 		private var _self : IBoid;
@@ -19,7 +19,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 		
 		private const _maxSpeed : Number = 10 + _strength;
 		
-		private const _maxForce : Number = 0.5 + _strength;
+		private const _maxForce : Number = 0.05 + _strength;
 
 		public function BoidFlock(self : IBoid)
 		{
