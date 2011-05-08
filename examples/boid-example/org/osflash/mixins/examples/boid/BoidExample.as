@@ -24,7 +24,7 @@ package org.osflash.mixins.examples.boid
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	[SWF(backgroundColor="#1d1d1d", frameRate="60", width="400", height="400")]
+	[SWF(backgroundColor="#1d1d1d", frameRate="60", width="800", height="800")]
 	public class BoidExample extends Sprite
 	{
 		
@@ -51,8 +51,8 @@ package org.osflash.mixins.examples.boid
 		{
 			for(var i : int = 0; i<30; i++)
 			{
-				const bx : int = Math.random() * 400;
-				const by : int = Math.random() * 400;
+				const bx : int = Math.random() * 800;
+				const by : int = Math.random() * 800;
 				
 				const boid : IBoid = mixin.create(IBoid, {x:bx, y:by});
 				
@@ -70,6 +70,5 @@ package org.osflash.mixins.examples.boid
 				boids[i].run(boids);
 			}
 		}
-
 	}
 }

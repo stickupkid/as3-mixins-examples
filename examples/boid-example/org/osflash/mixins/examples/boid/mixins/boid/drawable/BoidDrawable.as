@@ -21,7 +21,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.drawable
 		{
 			const g : Graphics = _self.graphic;
 			g.clear();
-			g.beginFill(0xff00ff);
+			g.beginFill(0xcccccc, 0.75);
 			g.drawCircle(_self.x, _self.y, 10);
 			g.endFill();
 		}

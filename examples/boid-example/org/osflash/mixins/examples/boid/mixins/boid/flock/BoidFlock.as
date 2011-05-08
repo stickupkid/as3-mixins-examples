@@ -3,11 +3,9 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 	import org.osflash.mixins.examples.boid.mixins.boid.IBoid;
 	import org.osflash.mixins.examples.boid.mixins.flock.IFlock;
 	import org.osflash.mixins.examples.boid.mixins.position.util.ExtendedPoint;
-
-	import flash.geom.Point;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
-	 */
+	 */ 
 	public class BoidFlock implements IFlock
 	{
 		
@@ -17,20 +15,23 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 		
 		private const _accelertion : ExtendedPoint = new ExtendedPoint();
 	
-		protected const strength : Number = Math.random() * 0.5;
+		private const _strength : Number = Math.random() * 0.5;
 		
-		protected const _maxSpeed : Number = 10 + strength;
+		private const _maxSpeed : Number = 10 + _strength;
 		
-		protected const maxForce : Number = 0.05 + strength;
+		private const _maxForce : Number = 0.5 + _strength;
 
 		public function BoidFlock(self : IBoid)
 		{
 			_self = self;
+			
+			_velocity.x = Math.random() * 2 - 1;
+			_velocity.y = Math.random() * 2 - 1;
 		}
 		
 		public function flock(boids : Vector.<IBoid>) : void
 		{
-			const sep : ExtendedPoint = separate(boids);
+			const sep : ExtendedPoint = separate(boids).multiply(3);
 			const ali : ExtendedPoint = align(boids);
 			const coh : ExtendedPoint = cohesion(boids);
 			
@@ -41,7 +42,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 		public function separate(boids : Vector.<IBoid>) : ExtendedPoint
 		{
 			const desiredSeperation : int = 60;
-			const steer : ExtendedPoint = new ExtendedPoint();
+			const s : ExtendedPoint = new ExtendedPoint();
 			
 			var count : int = 0;
 			
@@ -51,14 +52,14 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			for(var i : int = 0; i<total; i++)
 			{
 				const other : IBoid = boids[i];
-				const d : Number = Point.distance(loc, other.point);
+				const d : Number = other.point.distance(loc);
 				if(d > 0 && d < desiredSeperation)
 				{
-					const diff : Point = loc.subtract(other.point);
-					diff.normalize(1 / d);
+					const diff : ExtendedPoint = loc.subtract(other.point);
+					const normalized : ExtendedPoint = diff.normalize(1 / d);
 					
-					steer.x += diff.x;
-					steer.y += diff.y;
+					s.x += normalized.x;
+					s.y += normalized.y;
 					
 					count++;
 				}
@@ -66,25 +67,25 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			
 			if(count > 0)
 			{
-				steer.x /= count;
-				steer.y /= count;
+				s.x /= count;
+				s.y /= count;
 			}
 			
-			if(steer.length > 0)
+			if(s.length > 0)
 			{
-				steer.length = _maxSpeed;
-				steer.x -= velocity.x;
-				steer.y -= velocity.y;
-				steer.length = Math.min(steer.length, maxForce);
+				s.length = _maxSpeed;
+				s.x -= velocity.x;
+				s.y -= velocity.y;
+				s.length = Math.min(s.length, _maxForce);
 			}
 			
-			return steer;
+			return s;
 		}
 
 		public function align(boids : Vector.<IBoid>) : ExtendedPoint
 		{
 			const neighborDist : int = 25;
-			const steer : ExtendedPoint = new ExtendedPoint();
+			const s : ExtendedPoint = new ExtendedPoint();
 			
 			var count : int = 0;
 			var nearest : int = 999;
@@ -96,7 +97,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			for(var i : int = 0; i<total; i++)
 			{
 				const other : IBoid = boids[i];
-				const d : Number = Point.distance(loc, other.point);
+				const d : Number = other.point.distance(loc);
 				if(d > 0 && d < nearest)
 				{
 					closestPoint = other.point;
@@ -104,33 +105,33 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 				}
 				if(d > 0 && d < neighborDist)
 				{
-					steer.x += other.velocity.x;
-					steer.y += other.velocity.y;
+					s.x += other.velocity.x;
+					s.y += other.velocity.y;
 					count++;
 				}
 			}
 			
 			if(count > 0)
 			{
-				steer.x /= count;
-				steer.y /= count;
+				s.x /= count;
+				s.y /= count;
 			}
 			
-			if(steer.length > 0)
+			if(s.length > 0)
 			{
-				steer.length = _maxSpeed;
-				steer.x -= velocity.x;
-				steer.y -= velocity.y;
-				steer.length = Math.min(steer.length, maxForce);
+				s.length = _maxSpeed;
+				s.x -= velocity.x;
+				s.y -= velocity.y;
+				s.length = Math.min(s.length, _maxForce);
 			}
 			
-			return steer;
+			return s;
 		}
 
 		public function cohesion(boids : Vector.<IBoid>) : ExtendedPoint
 		{
 			const neighborDist : int = 100;
-			const sum : ExtendedPoint = new ExtendedPoint();
+			const s : ExtendedPoint = new ExtendedPoint();
 			
 			var count : int = 0;
 			
@@ -140,59 +141,44 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			for(var i : int = 0; i<total; i++)
 			{
 				const other : IBoid = boids[i];
-				const d : Number = Point.distance(loc, other.point);
+				const d : Number = other.point.distance(loc);
 				if(d > 0 && d < neighborDist)
 				{
-					sum.x += other.point.x;
-					sum.y += other.point.y;
+					s.x += other.point.x;
+					s.y += other.point.y;
 					count++;
 				}
 			}
 			
 			if(count > 0)
 			{
-				sum.x /= count;
-				sum.y /= count;
+				s.x /= count;
+				s.y /= count;
 				
-				return steer(sum, false);
+				return steer(s, false);
 			}
 			
-			return sum;
+			return s;
 		}
 
 		public function steer(target : ExtendedPoint, slowdown : Boolean) : ExtendedPoint
 		{
 			const loc : ExtendedPoint = _self.point;
-			const desired : ExtendedPoint = new ExtendedPoint(target.x - loc.x, target.y - loc.y);
+			const desired : ExtendedPoint = target.subtract(loc);
 			const d : Number = desired.length;
 			
-			const steer : ExtendedPoint = new ExtendedPoint();
+			var steer : ExtendedPoint = new ExtendedPoint();
 			if(d > 0) 
 			{
 				if(slowdown && d < 100)
 					desired.length = _maxSpeed * (d / 100);
 				else
 					desired.length = _maxSpeed;
-				steer.x = desired.x - velocity.x;
-				steer.y = desired.y - velocity.y;
-				steer.length = Math.min(maxForce, steer.length); 
+				steer = desired.subtract(velocity);
+				steer.length = Math.min(_maxForce, steer.length); 
 			}
 			
 			return steer;
-		}
-
-		public function seek(boid : ExtendedPoint) : void
-		{
-			const point : ExtendedPoint = steer(boid, false);
-			_accelertion.x += point.x;
-			_accelertion.y += point.y;
-		}
-
-		public function arrive(boid : ExtendedPoint) : void
-		{
-			const point : ExtendedPoint = steer(boid, true);
-			_accelertion.x += point.x;
-			_accelertion.y += point.y;
 		}
 
 		public function get velocity() : ExtendedPoint { return _velocity; }

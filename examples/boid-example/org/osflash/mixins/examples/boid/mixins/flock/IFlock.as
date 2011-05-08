@@ -20,10 +20,6 @@ package org.osflash.mixins.examples.boid.mixins.flock
 
 		function steer(boid : ExtendedPoint, slowdown : Boolean) : ExtendedPoint;
 
-		function seek(boid : ExtendedPoint) : void;
-
-		function arrive(boid : ExtendedPoint) : void;
-
 		function get velocity() : ExtendedPoint;
 		
 		function get accelertion() : ExtendedPoint;
