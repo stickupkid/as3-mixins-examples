@@ -14,6 +14,13 @@ package org.osflash.mixins.examples.boid.mixins.position.util
 			super(x, y);
 		}
 		
+		override public function clone() : Point
+		{
+			const p : ExtendedPoint = new ExtendedPoint(x, y);
+			p._angle = _angle;
+			return p;
+		}
+		
 		private function getAngleInRadians() : Number
 		{
 			return (_angle = Math.atan2(y, x));
@@ -44,6 +51,5 @@ package org.osflash.mixins.examples.boid.mixins.position.util
 		{
 			return getAngleInRadians() * 180 / Math.PI; 
 		}
-
 	}
 }

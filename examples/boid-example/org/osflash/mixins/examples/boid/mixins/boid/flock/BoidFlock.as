@@ -1,8 +1,9 @@
 package org.osflash.mixins.examples.boid.mixins.boid.flock
 {
-	import org.osflash.mixins.examples.boid.mixins.position.util.ExtendedPoint;
 	import org.osflash.mixins.examples.boid.mixins.boid.IBoid;
 	import org.osflash.mixins.examples.boid.mixins.flock.IFlock;
+	import org.osflash.mixins.examples.boid.mixins.position.util.ExtendedPoint;
+
 	import flash.geom.Point;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
@@ -10,23 +11,28 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 	public class BoidFlock implements IFlock
 	{
 		
+		private var _self : IBoid;
+			
 		private const _velocity : ExtendedPoint = new ExtendedPoint();
 		
 		private const _accelertion : ExtendedPoint = new ExtendedPoint();
-		
-		private var _self : IBoid;
-		
+	
 		protected const strength : Number = Math.random() * 0.5;
 		
-		protected const maxSpeed : Number = 10 + strength;
+		protected const _maxSpeed : Number = 10 + strength;
 		
 		protected const maxForce : Number = 0.05 + strength;
-				
+
+		public function BoidFlock(self : IBoid)
+		{
+			_self = self;
+		}
+		
 		public function flock(boids : Vector.<IBoid>) : void
 		{
-			const sep : Point = separate(boids);
-			const ali : Point = align(boids);
-			const coh : Point = cohesion(boids);
+			const sep : ExtendedPoint = separate(boids);
+			const ali : ExtendedPoint = align(boids);
+			const coh : ExtendedPoint = cohesion(boids);
 			
 			_accelertion.x = sep.x + ali.x + coh.x;
 			_accelertion.y = sep.y + ali.y + coh.y;
@@ -42,7 +48,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			const loc : ExtendedPoint = _self.point;
 			
 			const total : int = boids.length;
-			for(var i : int = 0; total; i++)
+			for(var i : int = 0; i<total; i++)
 			{
 				const other : IBoid = boids[i];
 				const d : Number = Point.distance(loc, other.point);
@@ -66,7 +72,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			
 			if(steer.length > 0)
 			{
-				steer.length = maxSpeed;
+				steer.length = _maxSpeed;
 				steer.x -= velocity.x;
 				steer.y -= velocity.y;
 				steer.length = Math.min(steer.length, maxForce);
@@ -112,7 +118,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			
 			if(steer.length > 0)
 			{
-				steer.length = maxSpeed;
+				steer.length = _maxSpeed;
 				steer.x -= velocity.x;
 				steer.y -= velocity.y;
 				steer.length = Math.min(steer.length, maxForce);
@@ -129,7 +135,7 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			var count : int = 0;
 			
 			const loc : ExtendedPoint = _self.point;
-			
+		
 			const total : int = boids.length;
 			for(var i : int = 0; i<total; i++)
 			{
@@ -164,9 +170,9 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			if(d > 0) 
 			{
 				if(slowdown && d < 100)
-					desired.length = maxSpeed * (d / 100);
+					desired.length = _maxSpeed * (d / 100);
 				else
-					desired.length = maxSpeed;
+					desired.length = _maxSpeed;
 				steer.x = desired.x - velocity.x;
 				steer.y = desired.y - velocity.y;
 				steer.length = Math.min(maxForce, steer.length); 
@@ -189,10 +195,10 @@ package org.osflash.mixins.examples.boid.mixins.boid.flock
 			_accelertion.y += point.y;
 		}
 
-		public function get self() : IBoid { return _self; }
-
-		public function set self(value : IBoid) : void { _self = value;	}
-
 		public function get velocity() : ExtendedPoint { return _velocity; }
+
+		public function get accelertion() : ExtendedPoint { return _accelertion; }
+
+		public function get maxSpeed() : Number { return _maxSpeed; }
 	}
 }

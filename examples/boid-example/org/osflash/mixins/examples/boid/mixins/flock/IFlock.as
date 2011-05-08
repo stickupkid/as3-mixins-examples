@@ -1,15 +1,15 @@
 package org.osflash.mixins.examples.boid.mixins.flock
 {
 	import org.osflash.mixins.examples.boid.mixins.boid.IBoid;
-	import org.osflash.mixins.examples.boid.mixins.boid.IBoidSelf;
 	import org.osflash.mixins.examples.boid.mixins.position.util.ExtendedPoint;
 
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public interface IFlock extends IBoidSelf
+	public interface IFlock
 	{
-
+			
+			
 		function flock(boids : Vector.<IBoid>) : void;
 
 		function separate(boids : Vector.<IBoid>) : ExtendedPoint;
@@ -25,5 +25,9 @@ package org.osflash.mixins.examples.boid.mixins.flock
 		function arrive(boid : ExtendedPoint) : void;
 
 		function get velocity() : ExtendedPoint;
+		
+		function get accelertion() : ExtendedPoint;
+		
+		function get maxSpeed() : Number;
 	}
 }
