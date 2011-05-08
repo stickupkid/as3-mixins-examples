@@ -11,5 +11,10 @@ package org.osflash.mixins.examples.boid.mixins.boid.base
 		
 		[Inject]
 		public var boid : IBoid;
+		
+		public function _init_() : void
+		{
+			
+		}
 	}
 }

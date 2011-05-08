@@ -17,6 +17,7 @@ package org.osflash.mixins.examples.ball
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
+	[SWF(backgroundColor="#1d1d1d", frameRate="60", width="800", height="800")]
 	public class BallExample extends Sprite
 	{
 

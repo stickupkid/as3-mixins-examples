@@ -18,10 +18,20 @@ package org.osflash.mixins.examples.boid.mixins.boid.drawable
 		
 		public function draw() : void
 		{
+			const x : int = _self.x;
+			const y : int = _self.y;
+			
 			const g : Graphics = _self.graphic;
 			g.clear();
-			g.beginFill(0xcccccc, 0.75);
-			g.drawEllipse(_self.x - 10, _self.y - 8, 20, 16);
+			
+			g.lineStyle(1, 0xffffff, 0.2);
+			g.beginFill(0xffffff, 0.1);
+			g.drawCircle(x, y, 12);
+			g.endFill();
+			
+			g.lineStyle(0, 0xffffff);
+			g.beginFill(0xffffff, 1);
+			g.drawCircle(x, y, 4);
 			g.endFill();
 		}
 	}
